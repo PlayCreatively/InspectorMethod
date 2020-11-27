@@ -15,6 +15,9 @@ namespace Freyr.EditorMethod
         public static implicit operator MethodData<TOut>(Func<TOut> method) => new MethodData<TOut>(method);
 
         public TOut Invoke() => GetMethod();
+
+        /// <summary>Invoke using <see cref="MethodData.Invoke(bool, object[])"/> with ignoreParamCount = true and restrict by appropriate types.</summary>
+        public TOut LooseInvoke() => (TOut)Invoke(true);
     }
 
     [Serializable]
@@ -29,6 +32,9 @@ namespace Freyr.EditorMethod
         public static implicit operator MethodData<TIn, TOut>(Func<TIn, TOut> method) => new MethodData<TIn, TOut>(method);
 
         public TOut Invoke(TIn value) => GetMethod(value);
+
+        /// <summary>Invoke using <see cref="MethodData.Invoke(bool, object[])"/> with ignoreParamCount = true and restrict by appropriate types.</summary>
+        public TOut LooseInvoke(TIn value) => (TOut)Invoke(true, value);
     }
 
     [Serializable]
@@ -43,6 +49,9 @@ namespace Freyr.EditorMethod
         public static implicit operator MethodData<TIn1, TIn2, TOut>(Func<TIn1, TIn2, TOut> method) => new MethodData<TIn1, TIn2, TOut>(method);
 
         public TOut Invoke(TIn1 value1, TIn2 value2) => GetMethod(value1, value2);
+
+        /// <summary>Invoke using <see cref="MethodData.Invoke(bool, object[])"/> with ignoreParamCount = true and restrict by appropriate types.</summary>
+        public TOut LooseInvoke(TIn1 value1, TIn2 value2) => (TOut)Invoke(true, value1, value2);
     }
 
     [Serializable]
@@ -57,6 +66,9 @@ namespace Freyr.EditorMethod
         public static implicit operator MethodData<TIn1, TIn2, TIn3, TOut>(Func<TIn1, TIn2, TIn3, TOut> method) => new MethodData<TIn1, TIn2, TIn3, TOut>(method);
 
         public TOut Invoke(TIn1 value1, TIn2 value2, TIn3 value3) => GetMethod(value1, value2, value3);
+
+        /// <summary>Invoke using <see cref="MethodData.Invoke(bool, object[])"/> with ignoreParamCount = true and restrict by appropriate types.</summary>
+        public TOut LooseInvoke(TIn1 value1, TIn2 value2, TIn3 value3) => (TOut)Invoke(true, value1, value2, value3);
     }
 
 }

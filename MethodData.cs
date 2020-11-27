@@ -12,7 +12,7 @@ namespace Freyr.EditorMethod
         //Serializable//
         [SerializeField] protected string methodName;
         [SerializeField] protected UnityEngine.Object targetInstance;
-        [SerializeField] protected string[] parameters;
+        //[SerializeField] protected string[] parameters;
         [SerializeField] protected int selectedIndex;
         [SerializeField] protected string targetType;
 
@@ -49,15 +49,28 @@ namespace Freyr.EditorMethod
             targetTypeHash = methodInfo.DeclaringType;
         }
 
+        /// <summary>Invokes using reflection.</summary>
         public object Invoke(params object[] parameters) 
             => GetMethodInfo.Invoke(targetInstance, parameters);
 
+        /// <summary>Invokes using reflection.</summary>
+        /// <param name="ignoreParamCount">Shorten parameter array to fit invoking method. Slower to ignoreParamCount.</param>
+        public object Invoke(bool ignoreParamCount, params object[] parameters)
+            => GetMethodInfo.Invoke(targetInstance, parameters, ignoreParamCount);
+
         public T ToDelegate<T>() where T : Delegate
         {
-            if(targetInstance != null) 
-                return Delegate.CreateDelegate(typeof(T), targetInstance, methodName) as T;
-            else
-                return Delegate.CreateDelegate(typeof(T), GetTargetType, methodName) as T;
+            try
+            {
+                if(targetInstance != null) 
+                    return Delegate.CreateDelegate(typeof(T), targetInstance, methodName) as T;
+                else
+                    return Delegate.CreateDelegate(typeof(T), GetTargetType, methodName) as T;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"{e.Message} If your intention is to invoke the method try using the equivalent overload that uses reflections.");
+            }
         }
         public bool ToDelegate<T>(out T outDelegate) where T : Delegate
         {

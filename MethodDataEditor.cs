@@ -38,11 +38,13 @@ namespace Freyr.EditorMethod
             position.height = 20f;
 
             BindingFlags bindingFlags = BindingFlags.Default;
+            bool exactMatch = true;
             Type targetTypeValue = null;
 
             if (attribute is MethodListAttribute freyrDelegateAttr)
             {
                 bindingFlags = freyrDelegateAttr.BindingFlags;
+                exactMatch = freyrDelegateAttr.ExactMatch;
                 targetTypeValue = freyrDelegateAttr.TargetType;
             }
 
@@ -53,8 +55,8 @@ namespace Freyr.EditorMethod
 
             //Method array
             MethodInfo[] methodInfos = targetTypeValue.GetMethodsExtension(bindingFlags)
-                .Where(method => returnType == typeof(object) || method.ReturnType == returnType)
-                .Where(method => MethodDataHelper.AreParametersEqual(method.GetParameters(), paramTypes))
+                .Where(method => (!exactMatch && returnType == typeof(object)) || method.ReturnType == returnType)
+                .Where(method => MethodDataHelper.AreParametersEqual(method.GetParameters(), paramTypes, exactMatch))
                 .ToArray();
 
             //if no methods are found
@@ -74,19 +76,19 @@ namespace Freyr.EditorMethod
             //selectedIndex property
             methodName.stringValue = methodInfos[selectedIndex.intValue].Name;
 
-            //parameters property
-            var paramNames = methodInfos[selectedIndex.intValue].GetParameters().Select(param => param.ParameterType.Name).ToArray();
-            int sizeDif = -parameters.arraySize + paramNames.Length;
-            if (sizeDif < 0)
-                for (; sizeDif != 0; sizeDif++)
-                    parameters.DeleteArrayElementAtIndex(0);
+            ////parameters property
+            //var paramNames = methodInfos[selectedIndex.intValue].GetParameters().Select(param => param.ParameterType.Name).ToArray();
+            //int sizeDif = -parameters.arraySize + paramNames.Length;
+            //if (sizeDif < 0)
+            //    for (; sizeDif != 0; sizeDif++)
+            //        parameters.DeleteArrayElementAtIndex(0);
                     
-            else if (sizeDif > 0)
-                for (;-sizeDif != 0; sizeDif--)
-                    parameters.InsertArrayElementAtIndex(0);
+            //else if (sizeDif > 0)
+            //    for (;-sizeDif != 0; sizeDif--)
+            //        parameters.InsertArrayElementAtIndex(0);
 
-            for (int i = 0; i < paramNames.Length; i++)
-                parameters.GetArrayElementAtIndex(i).stringValue = paramNames[i];
+            //for (int i = 0; i < paramNames.Length; i++)
+            //    parameters.GetArrayElementAtIndex(i).stringValue = paramNames[i];
 
             //Target Type
             targetType.stringValue = targetTypeValue.ToString();

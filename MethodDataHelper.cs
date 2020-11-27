@@ -63,16 +63,14 @@ namespace Freyr.EditorMethod
         /// <param name="parameterInfos"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static bool AreParametersEqual(ParameterInfo[] parameterInfos, Type[] types)
+        public static bool AreParametersEqual(ParameterInfo[] parameterInfos, Type[] types, bool exactMatch)
         {
-            if (parameterInfos.Length > types.Length) return false;
+            if (exactMatch && parameterInfos.Length != types.Length) return false;
+            else if (parameterInfos.Length > types.Length) return false;
 
-            int length = Mathf.Min(parameterInfos.Length, types.Length);
-            if (length == 0) return true;
-
-            bool results = false;
-            for (int i = 0; i < length; i++)
-                results |= parameterInfos[i].ParameterType == types[i];
+            bool results = true;
+            for (int i = 0; i < parameterInfos.Length; i++)
+                results &= parameterInfos[i].ParameterType == types[i];
             return results;
         }
 
@@ -101,8 +99,9 @@ namespace Freyr.EditorMethod
             if (ignoreParamCount)
             {
                 int count = methodBase.GetParameters().Length;
-                if (count < parameters.Length) parameters = parameters.Take(count).ToArray();
-                else if(count > parameters.Length)
+                if (count < parameters.Length) 
+                    Array.Resize(ref parameters, count);
+                else if (count > parameters.Length)
                     throw new TargetParameterCountException($"Parameters don't meet required amount. Expected {count} but got {parameters.Length}.");
             }
         
