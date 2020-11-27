@@ -6,7 +6,7 @@ namespace Freyr.EditorMethod
 {
     public class MethodListAttribute : PropertyAttribute
     {
-        public BindingFlags BindingFlags { get; set; }
-        public Type TargetType { get; set; }
+        public BindingFlags BindingFlags { get; set; } = BindingFlags.Public | BindingFlags.Static;
+        public Type TargetType { get; set; } = typeof(object);
     }
 }

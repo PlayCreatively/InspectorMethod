@@ -86,7 +86,15 @@ namespace Freyr.EditorMethod
                 print += ", " + parameterInfo[i].ToReadableString();
             return print;
         }
-        public static string ToReadableString(this MethodInfo methodInfo) => $"{methodInfo.Name} ({methodInfo.GetParameters().ToReadableString()})";
+        public static string ToReadableString(this MethodInfo methodInfo)
+        {
+            string readableText = $"{methodInfo.ReturnType.Name} ";
+            if (methodInfo.Name.Contains("get_"))
+                readableText += methodInfo.Name.Substring("get_".Length);
+            else
+                readableText +=  $"{methodInfo.Name} ({methodInfo.GetParameters().ToReadableString()})";
+            return readableText;
+        }
 
         public static object Invoke(this MethodBase methodBase, object target, object[] parameters, bool ignoreParamCount)
         {

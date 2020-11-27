@@ -19,9 +19,13 @@ namespace Freyr.EditorMethod
             {
                 var genericTypeArguments = fieldInfo.FieldType.GenericTypeArguments;
 
-                returnType = genericTypeArguments[0];
-                if(genericTypeArguments.Length > 1)
-                    paramTypes = genericTypeArguments.Skip(1).ToArray();
+                int length = genericTypeArguments.Length;
+                returnType = genericTypeArguments[length-1];
+                if(length > 1)
+                {
+                    Array.Resize(ref genericTypeArguments, length - 1);
+                    paramTypes = genericTypeArguments;
+                }
             }
 
             //Properties

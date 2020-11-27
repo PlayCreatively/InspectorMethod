@@ -5,10 +5,10 @@ namespace Freyr.EditorMethod
     [Serializable]
     public class Conditional<T>
     {
-        [MethodList(TargetType = typeof(object))]
-        public MethodData<bool, T> Condition;
-        [MethodList(TargetType = typeof(object))]
-        public MethodData<object, T> OnSuccess;
+        [MethodList]
+        public MethodData<T, bool> Condition;
+        [MethodList]
+        public MethodData<T, object> OnSuccess;
 
         public bool Try(T value)
         {
