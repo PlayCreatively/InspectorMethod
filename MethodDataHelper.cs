@@ -107,5 +107,9 @@ namespace Freyr.EditorMethod
         
             return methodBase.Invoke(target, parameters);
         }
+
+        public static MethodData<TOut> GetMethodData<TOut>(this Func<TOut> method) => method;
+        public static MethodData<TIn, TOut> GetMethodData<TIn, TOut>(this Func<TIn, TOut> method) => method;
+        public static MethodData<TIn1, TIn2, TOut> GetMethodData<TIn1, TIn2, TOut>(this Func<TIn1, TIn2, TOut> method) => method;
     }
 }
